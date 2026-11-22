@@ -1,0 +1,34 @@
+# Baut den Windows-Installer und veröffentlicht ihn als GitHub Release, sobald ein Tag wie v1.0.0 hochgeladen wird.
+# Die installierte App findet neue Releases selbst (electron-updater). Ein Konto-Token ist nicht nötig, GITHUB_TOKEN reicht.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test
+      - name: Tag und Version müssen übereinstimmen
+        shell: bash
+        run: |
+          V=$(node -p "require('./package.json').version")
+          if [ "v$V" != "$GITHUB_REF_NAME" ]; then
+            echo "Der Tag $GITHUB_REF_NAME passt nicht zur Version $V in package.json. Bitte beides angleichen."
+            exit 1
+          fi
+      - name: Installer bauen und veröffentlichen
+        shell: bash
+        run: npx electron-builder --win --publish always --config.publish.owner="${{ github.repository_owner }}" --config.publish.repo="${{ github.event.repository.name }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
