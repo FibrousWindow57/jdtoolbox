@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'">
+<title>JD Toolbox</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<main>
+  <img src="logo.png" alt="JD Toolbox">
+  <h1>JD Toolbox</h1>
+  <p>Bitte gib die Adresse deiner JD Toolbox ein. Du bekommst sie beim Einrichten der Toolbox, sie endet meist auf <strong>.workers.dev</strong>.</p>
+  <form id="f" novalidate>
+    <label>Adresse der JD Toolbox
+      <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://jd-toolbox.dein-name.workers.dev" required>
+    </label>
+    <div id="err" class="error" role="alert"></div>
+    <button id="go" type="submit">Verbinden</button>
+  </form>
+  <p class="small" id="ver"></p>
+</main>
+<script src="setup.js"></script>
+</body>
+</html>
